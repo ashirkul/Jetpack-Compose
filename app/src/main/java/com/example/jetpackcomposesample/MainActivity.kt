@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.Center
@@ -27,59 +28,17 @@ import com.example.jetpackcomposesample.ui.theme.JetpackComposeSampleTheme
 
 class MainActivity : ComponentActivity() {
 
-    val modelList = mutableStateListOf<ModelList>(ModelList("Hello",2),ModelList("Welcome",3),ModelList("ADBJKAD",1),ModelList("Hello",4))
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             JetpackComposeSampleTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android",modelList)
+                    Navigation()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, list : SnapshotStateList<ModelList>? = null) {
-//    val modelList = mutableListOf<ModelList>(ModelList("Hello",2),ModelList("Welcome",3),ModelList("ADBJKAD",1),ModelList("Hello",4))
-//    val listState = rememberLazyListState()
-    list?.let {
-        LazyColumn {
-            items(it) { item ->
-                ItemRow(item = item,list)
-            }
-        }
 
-    }
-    rememberLazyListState()
-}
-
-@Composable
-private fun ItemRow(item: ModelList,list : SnapshotStateList<ModelList>? = null){
-    val context = LocalContext.current
-    Text(text = item.string,Modifier.clickable(onClick = {
-//        list?.set(list.indexOf(item),ModelList("New",2))
-//        list?.get(list.indexOf(item))?.string = "New"
-        item.string = "New"
-    }))
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    JetpackComposeSampleTheme {
-        Greeting("Android")
-    }
-}
-
-
-
-data class ModelList(var string : String, val int : Int){
-    override fun equals(other: Any?): Boolean {
-        if(other is ModelList) {
-             return string == other.string
-        }
-        return super.equals(other)
-    }
-}
